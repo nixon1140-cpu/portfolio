@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI・DXエンジニア ポートフォリオ｜AIニュース行動提案ダッシュボード</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI",sans-serif;
+    background:#f4f6f9;
+    color:#333;
+    line-height:1.75;
+}
+
+header{
+    background:linear-gradient(135deg,#0078D4,#4F46E5);
+    color:white;
+    text-align:center;
+    padding:70px 20px 60px;
+}
+
+header .catch{
+    font-size:1.5rem;
+    font-weight:700;
+    margin-bottom:14px;
+}
+
+header .sub{
+    font-size:1.05rem;
+    opacity:.92;
+}
+
+.container{
+    width:92%;
+    max-width:1100px;
+    margin:auto;
+    padding:40px 0;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    padding:32px;
+    margin-bottom:28px;
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+
+h2{
+    color:#0078D4;
+    border-left:5px solid #0078D4;
+    padding-left:15px;
+    margin-bottom:18px;
+    font-size:1.3rem;
+}
+
+h3.screen-title{
+    color:#1f2937;
+    font-size:1.15rem;
+    margin-bottom:10px;
+}
+
+p.lead{
+    font-size:1.05rem;
+    font-weight:600;
+    color:#1f2937;
+}
+
+.flow{
+    background:#eef5ff;
+    border-left:5px solid #0078D4;
+    padding:18px;
+    margin-top:10px;
+    font-weight:bold;
+    text-align:center;
+    border-radius:8px;
+}
+
+.tech-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:16px;
+}
+
+.tech-box{
+    background:#f8f9fc;
+    border-radius:10px;
+    padding:18px;
+    text-align:center;
+}
+
+.tech-box .name{
+    font-weight:700;
+    color:#0078D4;
+    margin-bottom:6px;
+}
+
+.tech-box .role{
+    font-size:.92rem;
+    color:#555;
+}
+
+.screen-block{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:24px;
+    align-items:start;
+    margin-bottom:34px;
+}
+
+.screen-block:last-child{
+    margin-bottom:0;
+}
+
+.screen-block img{
+    width:100%;
+    border-radius:10px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* 「記事詳細」screen-blockのみで使う2x2ミニギャラリー（例外的な構造）。
+   既存の .screen-block img { width:100%; ... } は子孫要素にも適用されるため、
+   グリッドセル内で自然にフィットしサムネイルとして問題なく機能する（確認済み）。
+   figure/figcaptionの余白調整のみ、このクラス側で明示的に指定する。 */
+.screen-mini-gallery{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.screen-mini-gallery figure{
+    margin:0;
+}
+
+.screen-mini-gallery img{
+    width:100%;
+    display:block;
+}
+
+.screen-mini-gallery figcaption{
+    text-align:center;
+    font-size:.78rem;
+    color:#555;
+    margin-top:6px;
+}
+
+.screen-points li{
+    margin-bottom:10px;
+    list-style:none;
+    padding-left:1.4em;
+    position:relative;
+    font-size:.95rem;
+}
+
+.screen-points li b{
+    display:block;
+    color:#0078D4;
+    font-size:.82rem;
+    margin-bottom:2px;
+}
+
+.screen-points li::before{
+    content:"▸";
+    position:absolute;
+    left:0;
+    color:#4F46E5;
+}
+
+@media (max-width:800px){
+    .screen-block{
+        grid-template-columns:1fr;
+    }
+}
+
+/* screen-mini-gallery専用のブレークポイント（.screen-blockと同じ800pxを使用）。
+   .screen-blockが1列に崩れた際、ミニギャラリーはコンテナ全幅を得られるため
+   基本的には2列のままで問題ないが、サムネイルが小さくなりすぎないよう
+   最小幅を明示的に保証する。 */
+@media (max-width:800px){
+    .screen-mini-gallery{
+        grid-template-columns:repeat(2,minmax(120px,1fr));
+        gap:8px;
+    }
+}
+
+.kufu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;
+}
+
+.kufu-box{
+    background:#fff8e7;
+    border-left:5px solid #f59e0b;
+    border-radius:10px;
+    padding:18px;
+}
+
+.kufu-box .problem{
+    font-size:.85rem;
+    color:#b45309;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.value-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;
+}
+
+.value-box{
+    background:#f0fdf4;
+    border-left:5px solid #16a34a;
+    border-radius:10px;
+    padding:18px;
+}
+
+ul.simple{
+    margin-left:20px;
+}
+
+.github{
+    text-align:center;
+}
+
+.github a{
+    color:white;
+    background:#24292e;
+    text-decoration:none;
+    padding:14px 30px;
+    border-radius:8px;
+    display:inline-block;
+    font-weight:600;
+}
+
+footer{
+    background:#1f2937;
+    color:white;
+    text-align:center;
+    padding:26px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="catch">情報収集ではなく、意思決定に時間を使えるようにする。</div>
+<div class="sub">AIがITニュースを要約・分析し、行動提案まで自動生成するダッシュボードを開発しました。</div>
+</header>
+
+<div class="container">
+
+<!-- ② 課題（背景） -->
+<section class="card">
+<h2>💡 開発の背景</h2>
+<p>AI・IT分野は情報量が爆発的に増え、個人では追い切れなくなっています。</p>
+<p>情報収集・整理に時間を奪われ、判断や行動に使う時間が減っていました。</p>
+<p>実際に業務でも、最新情報のキャッチアップに時間がかかるという課題がありました。</p>
+</section>
+
+<!-- ③ 画面一覧 -->
+<section class="card">
+<h2>🖥 画面一覧</h2>
+
+<div class="screen-block">
+<img src="images/dashboard.png" alt="ダッシュボード画面">
+<div>
+<h3 class="screen-title">ダッシュボード</h3>
+<ul class="screen-points">
+<li><b>できること</b>優先度・カテゴリ別に整理されたニュース一覧を表示</li>
+<li><b>価値</b>重要な情報だけを数秒で把握でき、記事を読み漁る必要がない</li>
+<li><b>裏側処理</b>RSSで収集した記事をAIが要約・優先度判定し、DBに保存して表示</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<div class="screen-mini-gallery">
+<figure>
+<img src="images/article-detail-summary.png" alt="記事詳細画面（要約タブ）">
+<figcaption>要約</figcaption>
+</figure>
+<figure>
+<img src="images/article-detail-diff.png" alt="記事詳細画面（変化タブ）">
+<figcaption>変化</figcaption>
+</figure>
+<figure>
+<img src="images/article-detail-action-eng.png" alt="記事詳細画面（行動提案タブ・エンジニア視点）">
+<figcaption>行動提案（エンジニア視点）</figcaption>
+</figure>
+<figure>
+<img src="images/article-detail-action-biz.png" alt="記事詳細画面（行動提案タブ・ビジネス視点）">
+<figcaption>行動提案（ビジネス視点）</figcaption>
+</figure>
+</div>
+<div>
+<h3 class="screen-title">記事詳細</h3>
+<ul class="screen-points">
+<li><b>3タブの意味</b>「要約」「変化」「行動提案」を分けて何が起き何をすべきかを明示</li>
+<li><b>意思決定への活用</b>行動提案タブを見るだけで次のアクションを判断できる</li>
+<li><b>AI処理</b>ローカルAIが記事本文から3種のアウトプットを構造化して生成</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/bookmarks.png" alt="ブックマーク画面">
+<div>
+<h3 class="screen-title">ブックマーク</h3>
+<ul class="screen-points">
+<li><b>操作</b>気になる記事をワンクリックで保存し、一覧から後で見返せる</li>
+<li><b>状態管理</b>Zustandで保存状態を管理し、画面間で即座に反映</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/trends.png" alt="トレンド分析画面">
+<div>
+<h3 class="screen-title">トレンド分析</h3>
+<ul class="screen-points">
+<li><b>できること</b>直近の記事群からAIが業界トレンドを3件に集約</li>
+<li><b>価値</b>個別記事を読まずに、業界の流れを短時間で把握できる</li>
+<li><b>裏側処理</b>複数記事のテキストをAIへ入力し傾向を抽出、12時間キャッシュで再計算を抑制</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/deep-analysis.png" alt="深掘り分析画面">
+<div>
+<h3 class="screen-title">深掘り分析</h3>
+<ul class="screen-points">
+<li><b>目的</b>ローカルAIでは踏み込めない、より高度な分析を行う</li>
+<li><b>意思決定への貢献</b>精度の高い分析結果を踏まえて判断できる</li>
+<li><b>外部AI連携</b>プロンプトを自動生成し「ChatGPT / Gemini / Claude」の公式画面へ引き渡すマルチAIハンドオフ方式を採用。API課金ゼロを実現しつつ、ユーザーの選択状態をZustandで永続化し、毎回選ぶ手間（トイル）を排除。</li>
+</ul>
+</div>
+</div>
+
+</section>
+
+<!-- ④ システムの流れ -->
+<section class="card">
+<h2>🔄 システムの流れ</h2>
+<div class="flow">
+RSS収集 → API処理 → AI要約・行動提案 → DB保存 → ダッシュボード表示
+</div>
+</section>
+
+<!-- ⑤ 技術構成（役割ベース） -->
+<section class="card">
+<h2>🏗 技術構成</h2>
+<div class="tech-grid">
+<div class="tech-box"><div class="name">Next.js</div><div class="role">画面表示（UI）</div></div>
+<div class="tech-box"><div class="name">Node.js</div><div class="role">API処理</div></div>
+<div class="tech-box"><div class="name">Supabase</div><div class="role">データ保存</div></div>
+<div class="tech-box"><div class="name">Ollama</div><div class="role">ローカルAI（日常分析）</div></div>
+<div class="tech-box"><div class="name">ChatGPT / Gemini / Claude</div><div class="role">高度分析（深掘り分析）</div></div>
+</div>
+</section>
+
+<!-- ⑥ 技術的な工夫（最重要） -->
+<section class="card">
+<h2>⭐ 技術的な工夫</h2>
+<div class="kufu-grid">
+<div class="kufu-box">
+<div class="problem">課題：AI出力が不安定</div>
+JSON Schemaで構造化し、崩れた出力を検知・リトライして安定化しました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：API費用がかさむ</div>
+日常の要約・分析はローカルLLM（Ollama）で処理し、運用コストをゼロにしました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：AIの適材適所とベンダーロックイン回避</div>
+基本分析はローカルAI、高度な分析が必要な時だけ「ChatGPT / Gemini / Claude」からユーザーが自由に選択してプロンプトを引き渡すマルチAI設計にし、特定LLMへの依存リスクを排除。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：負荷・コスト対策</div>
+トレンド分析は12時間キャッシュし、AIへの再計算リクエストを抑制しました。
+</div>
+</div>
+</section>
+
+<!-- ⑦ 自分の担当 -->
+<section class="card">
+<h2>👤 自分の担当</h2>
+<p>要件定義・設計・実装・テストまで、個人開発で一貫して担当しました。</p>
+</section>
+
+<!-- ⑧ 課題と解決 -->
+<section class="card">
+<h2>🛠 課題と解決</h2>
+<p><b>発生した問題：</b>ローカルLLMが低頻度で同一文字列を無限に繰り返す出力崩壊を起こしました。</p>
+<p><b>解決方法：</b>自動リトライと英語混入検知による再翻訳処理を組み込み、安定運用を実現しました。</p>
+</section>
+
+<!-- ⑨ ビジネス価値 -->
+<section class="card">
+<h2>💼 ビジネス価値</h2>
+<div class="value-grid">
+<div class="value-box">社内マニュアル検索・議事録分析・問い合わせ履歴分析など、社内ナレッジ活用へ応用できます。</div>
+<div class="value-box">情報収集・共有にかかる時間を削減し、意思決定のスピードを上げる業務改善に貢献します。</div>
+</div>
+</section>
+
+<!-- ⑩ 今後の拡張 -->
+<section class="card">
+<h2>🚀 今後の拡張</h2>
+<ul class="simple">
+<li>AIエージェント化（行動提案の自動実行）</li>
+<li>Microsoft 365連携</li>
+</ul>
+</section>
+
+<!-- ⑪ GitHubリンク -->
+<section class="card">
+<h2>🔗 GitHub</h2>
+<div class="github">
+<a href="https://github.com/nixon1140-cpu/it-news-app" target="_blank">GitHub Repository</a>
+</div>
+</section>
+
+</div>
+
+<footer>
+AI・DXエンジニア ポートフォリオ © 2026
+</footer>
+
+</body>
+</html>
