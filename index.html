@@ -249,6 +249,41 @@ footer{
     padding:26px;
 }
 
+/* プロジェクト切り替えタブ（既存クラスと衝突しない新規名前空間）。 */
+.project-tabs{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+}
+
+.project-tab-button{
+    background:white;
+    border:2px solid #0078D4;
+    color:#0078D4;
+    font-weight:700;
+    padding:10px 24px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:.95rem;
+    font-family:inherit;
+    transition:background .2s,color .2s;
+}
+
+.project-tab-button.active{
+    background:#0078D4;
+    color:white;
+}
+
+.project-tab-panel{
+    display:none;
+}
+
+.project-tab-panel.active{
+    display:block;
+}
+
 </style>
 </head>
 
@@ -260,6 +295,13 @@ footer{
 </header>
 
 <div class="container">
+
+<div class="project-tabs">
+<button type="button" class="project-tab-button active" data-tab="tab-itnews">IT News Navigator</button>
+<button type="button" class="project-tab-button" data-tab="tab-architectai">ArchitectAI</button>
+</div>
+
+<div id="tab-itnews" class="project-tab-panel active">
 
 <!-- ② 課題（背景） -->
 <section class="card">
@@ -433,10 +475,21 @@ JSON Schemaで構造化し、崩れた出力を検知・リトライして安定
 </div>
 </section>
 
-<!-- ⑫ ArchitectAI（別プロジェクト） -->
+</div>
+
+<div id="tab-architectai" class="project-tab-panel">
+
+<!-- ArchitectAI: 開発の背景 -->
 <section class="card">
-<h2>🏛 ArchitectAI（AIヒアリング駆動のシステム設計支援ツール）</h2>
-<p class="lead">漠然としたシステムのアイデアを、AIとの対話だけで「要件定義 → 構成案 → レビュー → 初期インフラコード生成」まで一気通貫で形にする、個人開発のシステム設計アシスタントです。</p>
+<h2>💡 開発の背景</h2>
+<p>新規システムの立ち上げ時、「作りたいものは何となくあるが、要件として言語化し、技術構成に落とし込む」作業には時間がかかります。</p>
+<p>個人開発では特に、要件定義から初期インフラ構築までを独力で進める必要があり、思いつきレベルのアイデアから「動かせる初期構成」までの距離を縮めたいと考えました。</p>
+<p>そこでAIとの対話だけで要件定義〜設計〜レビュー〜IaC生成までを一気通貫で支援するツールを開発しました。</p>
+</section>
+
+<!-- ArchitectAI: 画面一覧 -->
+<section class="card">
+<h2>🖥 画面一覧</h2>
 
 <div class="screen-block">
 <img src="images/architectai-initial.png" alt="ArchitectAI 初期画面・プロジェクト一覧">
@@ -461,6 +514,19 @@ JSON Schemaで構造化し、崩れた出力を検知・リトライして安定
 </div>
 </div>
 
+</section>
+
+<!-- ArchitectAI: システムの流れ -->
+<section class="card">
+<h2>🔄 システムの流れ</h2>
+<div class="flow">
+ヒアリング（Ollama） → 構成案作成（Ollama） → Claude Webレビュー → 確定JSON → IaC自動生成（ZIP）
+</div>
+</section>
+
+<!-- ArchitectAI: 技術構成 -->
+<section class="card">
+<h2>🏗 技術構成</h2>
 <div class="tech-grid">
 <div class="tech-box"><div class="name">FastAPI</div><div class="role">バックエンドAPI</div></div>
 <div class="tech-box"><div class="name">Next.js</div><div class="role">画面表示（UI）</div></div>
@@ -468,7 +534,41 @@ JSON Schemaで構造化し、崩れた出力を検知・リトライして安定
 <div class="tech-box"><div class="name">Ollama</div><div class="role">ヒアリング・構成案作成（無料）</div></div>
 <div class="tech-box"><div class="name">Claude Web</div><div class="role">最終レビュー（Human-in-the-Loop）</div></div>
 </div>
+</section>
 
+<!-- ArchitectAI: 技術的な工夫 -->
+<section class="card">
+<h2>⭐ 技術的な工夫</h2>
+<div class="kufu-grid">
+<div class="kufu-box">
+<div class="problem">課題：AIの提案をそのまま信用できない</div>
+Claude Webでのレビューを必須経路として残すHuman-in-the-Loop設計とし、確定後もJSONを画面上で編集・再生成できるようにして、レビューの厳格さと修正のしやすさを両立しました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：生成コードへのインジェクションリスク</div>
+サービス名を英数字・ハイフン・アンダースコアのみに正規表現でサニタイズし、docker-compose.ymlの構造が意図せず壊れることを防止しました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：確定後の再編集で過去の内容を失う</div>
+編集のたびに新しいバージョンとして履歴に追記する設計にし、常に最新の構成をエクスポートしつつ過去の確定内容も失わないようにしました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：認証情報の平文管理</div>
+DB認証情報を.envファイルへ分離し、.gitignoreで除外。リポジトリには値をプレースホルダー化した.env.exampleのみを含める運用にしました。
+</div>
+</div>
+</section>
+
+<!-- ArchitectAI: 課題と解決 -->
+<section class="card">
+<h2>🛠 課題と解決</h2>
+<p><b>発生した問題：</b>Tailwindのカラートークンを16進数のままCSS変数化したところ、bg-primary/10のような透明度修飾子が正しく機能せず、意図した色が描画されない不具合が発生しました。</p>
+<p><b>解決方法：</b>カラートークンをRGBチャンネル値として定義し直し、rgb(var(--x) / &lt;alpha-value&gt;)形式に統一することで、透明度修飾子が正しく機能するようにしました。</p>
+</section>
+
+<!-- ArchitectAI: GitHub -->
+<section class="card">
+<h2>🔗 GitHub</h2>
 <div class="github">
 <a href="https://github.com/nixon1140-cpu/architect-ai" target="_blank">GitHub Repository</a>
 </div>
@@ -479,6 +579,22 @@ JSON Schemaで構造化し、崩れた出力を検知・リトライして安定
 <footer>
 AI・DXエンジニア ポートフォリオ © 2026
 </footer>
+
+<script>
+(function(){
+    var buttons = document.querySelectorAll('.project-tab-button');
+    var panels = document.querySelectorAll('.project-tab-panel');
+    buttons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var target = btn.getAttribute('data-tab');
+            buttons.forEach(function(b){ b.classList.remove('active'); });
+            panels.forEach(function(p){ p.classList.remove('active'); });
+            btn.classList.add('active');
+            document.getElementById(target).classList.add('active');
+        });
+    });
+})();
+</script>
 
 </body>
 </html>
