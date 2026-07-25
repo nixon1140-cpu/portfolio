@@ -433,6 +433,47 @@ JSON Schemaで構造化し、崩れた出力を検知・リトライして安定
 </div>
 </section>
 
+<!-- ⑫ ArchitectAI（別プロジェクト） -->
+<section class="card">
+<h2>🏛 ArchitectAI（AIヒアリング駆動のシステム設計支援ツール）</h2>
+<p class="lead">漠然としたシステムのアイデアを、AIとの対話だけで「要件定義 → 構成案 → レビュー → 初期インフラコード生成」まで一気通貫で形にする、個人開発のシステム設計アシスタントです。</p>
+
+<div class="screen-block">
+<img src="images/architectai-initial.png" alt="ArchitectAI 初期画面・プロジェクト一覧">
+<div>
+<h3 class="screen-title">初期画面・プロジェクト管理</h3>
+<ul class="screen-points">
+<li><b>できること</b>プロジェクト名を入力するだけでヒアリング用セッションを自動生成</li>
+<li><b>状態の永続化</b>session_idをlocalStorageに保存し、画面をリロードしても作業中の状態を保持</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/architectai-completed.png" alt="ArchitectAI 確定済みJSON編集・エクスポート画面">
+<div>
+<h3 class="screen-title">構成確定・IaC生成</h3>
+<ul class="screen-points">
+<li><b>Human-in-the-Loop</b>ローカルAIが作成した構成案をClaude Webで人間がレビューし、最終JSONとして確定</li>
+<li><b>編集・再生成</b>確定後もJSONを画面上で直接編集し、既存のバリデーションを通した上で再生成できる</li>
+<li><b>IaC自動生成</b>確定JSONからDocker Compose一式をZIPとして自動生成</li>
+</ul>
+</div>
+</div>
+
+<div class="tech-grid">
+<div class="tech-box"><div class="name">FastAPI</div><div class="role">バックエンドAPI</div></div>
+<div class="tech-box"><div class="name">Next.js</div><div class="role">画面表示（UI）</div></div>
+<div class="tech-box"><div class="name">PostgreSQL</div><div class="role">データ保存</div></div>
+<div class="tech-box"><div class="name">Ollama</div><div class="role">ヒアリング・構成案作成（無料）</div></div>
+<div class="tech-box"><div class="name">Claude Web</div><div class="role">最終レビュー（Human-in-the-Loop）</div></div>
+</div>
+
+<div class="github">
+<a href="https://github.com/nixon1140-cpu/architect-ai" target="_blank">GitHub Repository</a>
+</div>
+</section>
+
 </div>
 
 <footer>
