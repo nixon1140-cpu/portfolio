@@ -433,6 +433,14 @@ JSON Schemaで構造化し、崩れた出力を検知・リトライして安定
 <div class="problem">課題：負荷・コスト対策</div>
 トレンド分析は12時間キャッシュし、AIへの再計算リクエストを抑制しました。
 </div>
+<div class="kufu-box">
+<div class="problem">課題：本文抽出精度と記事の重複</div>
+RSSスニペットのみでは情報量が薄く重複記事も発生していたため、Python（trafilatura／rapidfuzz）をサブプロセス化して本文抽出と重複検出を導入し、失敗時は既存処理へフォールバックする設計にしました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：記事蓄積によるダッシュボードの視認性低下</div>
+直近1週間の記事のみをダッシュボードに表示し、それ以前の記事は専用の過去ニュースページへ分離しました。
+</div>
 </div>
 </section>
 
