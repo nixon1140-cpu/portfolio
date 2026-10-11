@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI・DXエンジニア ポートフォリオ｜AIニュース行動提案ダッシュボード</title>
+<title>AI・DXエンジニア ポートフォリオ｜IT News Navigator・ArchitectAI・一人前エンジニア道場</title>
 
 <style>
 
@@ -232,6 +232,10 @@ ul.simple{
     text-align:center;
 }
 
+.github a + a{
+    margin-left:12px;
+}
+
 .github a{
     color:white;
     background:#24292e;
@@ -290,8 +294,8 @@ footer{
 <body>
 
 <header>
-<div class="catch">情報収集ではなく、意思決定に時間を使えるようにする。</div>
-<div class="sub">AIがITニュースを要約・分析し、行動提案まで自動生成するダッシュボードを開発しました。</div>
+<div class="catch">AI・DXエンジニア ポートフォリオ</div>
+<div class="sub">AI・DXに関わる3つのアプリを開発しました。</div>
 </header>
 
 <div class="container">
@@ -299,9 +303,16 @@ footer{
 <div class="project-tabs">
 <button type="button" class="project-tab-button active" data-tab="tab-itnews">IT News Navigator</button>
 <button type="button" class="project-tab-button" data-tab="tab-architectai">ArchitectAI</button>
+<button type="button" class="project-tab-button" data-tab="tab-dojo">一人前エンジニア道場</button>
 </div>
 
 <div id="tab-itnews" class="project-tab-panel active">
+
+<!-- IT News: キャッチコピー（ヘッダーから移動） -->
+<section class="card">
+<p class="lead">情報収集ではなく、意思決定に時間を使えるようにする。</p>
+<p>AIがITニュースを要約・分析し、行動提案まで自動生成するダッシュボードを開発しました。</p>
+</section>
 
 <!-- ② 課題（背景） -->
 <section class="card">
@@ -515,7 +526,7 @@ RSSスニペットのみでは情報量が薄く重複記事も発生してい�
 <div>
 <h3 class="screen-title">初期画面・プロジェクト管理</h3>
 <ul class="screen-points">
-<li><b>できること</b>プロジェクト名を入力するだけでヒアリング用セッションを自動生成</li>
+<li><b>できること</b>ログイン後、プロジェクト名を入力するだけでヒアリング用セッションを自動生成（初回は新規登録。全APIはJWT認証が必須）</li>
 <li><b>状態の永続化</b>session_idをlocalStorageに保存し、画面をリロードしても作業中の状態を保持</li>
 </ul>
 </div>
@@ -528,7 +539,7 @@ RSSスニペットのみでは情報量が薄く重複記事も発生してい�
 <ul class="screen-points">
 <li><b>Human-in-the-Loop</b>ローカルAIが作成した構成案をClaude Webで人間がレビューし、最終JSONとして確定</li>
 <li><b>編集・再生成</b>確定後もJSONを画面上で直接編集し、既存のバリデーションを通した上で再生成できる</li>
-<li><b>IaC自動生成</b>確定JSONからDocker Compose一式をZIPとして自動生成</li>
+<li><b>IaC自動生成</b>確定JSONから、Docker ComposeかTerraformを選んでZIPとして自動生成</li>
 </ul>
 </div>
 </div>
@@ -539,7 +550,7 @@ RSSスニペットのみでは情報量が薄く重複記事も発生してい�
 <section class="card">
 <h2>🔄 システムの流れ</h2>
 <div class="flow">
-ヒアリング（Ollama） → 構成案作成（Ollama） → Claude Webレビュー → 確定JSON → IaC自動生成（ZIP）
+ヒアリング（Ollama） → 構成案作成（Ollama） → Claude Webレビュー → 確定JSON → IaC自動生成（Docker Compose / Terraform、ZIP）
 </div>
 </section>
 
@@ -552,6 +563,9 @@ RSSスニペットのみでは情報量が薄く重複記事も発生してい�
 <div class="tech-box"><div class="name">PostgreSQL</div><div class="role">データ保存</div></div>
 <div class="tech-box"><div class="name">Ollama</div><div class="role">ヒアリング・構成案作成（無料）</div></div>
 <div class="tech-box"><div class="name">Claude Web</div><div class="role">最終レビュー（Human-in-the-Loop）</div></div>
+<div class="tech-box"><div class="name">JWT + bcrypt</div><div class="role">認証・パスワードのハッシュ化</div></div>
+<div class="tech-box"><div class="name">Alembic</div><div class="role">DB変更履歴の管理</div></div>
+<div class="tech-box"><div class="name">Jinja2</div><div class="role">IaCひな形への値の差し込み</div></div>
 </div>
 </section>
 
@@ -561,11 +575,11 @@ RSSスニペットのみでは情報量が薄く重複記事も発生してい�
 <div class="kufu-grid">
 <div class="kufu-box">
 <div class="problem">課題：AIの提案をそのまま信用できない</div>
-Claude Webでのレビューを必須経路として残すHuman-in-the-Loop設計とし、確定後もJSONを画面上で編集・再生成できるようにして、レビューの厳格さと修正のしやすさを両立しました。
+Claude Webでのレビューを必須経路として残すHuman-in-the-Loop設計としました。確定後の画面上での編集・再生成は、レビューを省く設計判断として用意し、同じ検査は必ず通すようにしています。
 </div>
 <div class="kufu-box">
 <div class="problem">課題：生成コードへのインジェクションリスク</div>
-サービス名を英数字・ハイフン・アンダースコアのみに正規表現でサニタイズし、docker-compose.ymlの構造が意図せず壊れることを防止しました。
+サービス名は英数字・ハイフン・アンダースコアのみを受け付ける検査を入口で行い、さらに出力時にも値をクォート処理することで、生成するdocker-compose.ymlやTerraformの構造が意図せず壊れることを防止しました。
 </div>
 <div class="kufu-box">
 <div class="problem">課題：確定後の再編集で過去の内容を失う</div>
@@ -605,8 +619,8 @@ DB認証情報を.envファイルへ分離し、.gitignoreで除外。リポジ�
 <h2>🚀 今後の拡張</h2>
 <ul class="simple">
 <li>1プロジェクトにつき複数セッションを保持できるようにする</li>
-<li>IaC生成テンプレートの対象をDocker Compose以外にも拡張する</li>
-<li>Claude APIとの直接連携オプションを追加する</li>
+<li>パスワードリセット・メールアドレス確認を追加する</li>
+<li>外部公開に向けて、招待制・レート制限を導入し、CORS（別サイトからのアクセス許可）の許可先を追加する</li>
 </ul>
 </section>
 
@@ -615,6 +629,180 @@ DB認証情報を.envファイルへ分離し、.gitignoreで除外。リポジ�
 <h2>🔗 GitHub</h2>
 <div class="github">
 <a href="https://github.com/nixon1140-cpu/architect-ai" target="_blank">GitHub Repository</a>
+</div>
+</section>
+
+</div>
+
+<div id="tab-dojo" class="project-tab-panel">
+
+<!-- 道場: 開発の背景 -->
+<section class="card">
+<h2>💡 開発の背景</h2>
+<p>AI時代に未経験エンジニアが「一人称で」活躍できるようになるための、体系的な学習サイトです。技術・ビジネス・AI時代の判断力を、1つのカリキュラムで身につけることをコンセプトにしています。</p>
+<p>Gensparkで作成したあと、ClaudeとClaude Codeで改修しました。</p>
+<p>未経験からエンジニアを目指したとき、学ぶことが多すぎて、何から順番に学べばよいかがわからず困りました。同じように迷う人が、順番どおりに進めるだけで一人前に近づける道筋を用意したいと考えて開発しました。</p>
+</section>
+
+<!-- 道場: 画面一覧 -->
+<section class="card">
+<h2>🖥 画面一覧</h2>
+
+<div class="screen-block">
+<img src="images/dojo-home.png" alt="トップ画面">
+<div>
+<h3 class="screen-title">トップ</h3>
+<ul class="screen-points">
+<li><b>できること</b>学習ロードマップと全体の統計を表示</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/dojo-tracks.png" alt="カリキュラム一覧画面">
+<div>
+<h3 class="screen-title">カリキュラム一覧</h3>
+<ul class="screen-points">
+<li><b>規模</b>技術・ビジネス・AI時代の3カテゴリ、19トラック・76レッスン</li>
+<li><b>仕組み</b>トラック数やレッスン数は配列から自動で数えて表示</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/dojo-lesson-coding.png" alt="レッスン画面（コーディング演習）">
+<div>
+<h3 class="screen-title">レッスン（演習付き）</h3>
+<ul class="screen-points">
+<li><b>演習の種類</b>4択クイズ／コード読解／コーディング演習／SQL演習</li>
+<li><b>裏側処理</b>コーディング演習はWeb Workerで実行し5秒で強制停止、SQL演習はブラウザ内のSQLite（sql.js）で採点</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/dojo-scenario.png" alt="実践シナリオ画面">
+<div>
+<h3 class="screen-title">実践シナリオ</h3>
+<ul class="screen-points">
+<li><b>できること</b>15本のロールプレイ。選択肢ごとにスコア（0／1／2）が付く</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/dojo-dashboard.png" alt="ダッシュボード画面">
+<div>
+<h3 class="screen-title">ダッシュボード</h3>
+<ul class="screen-points">
+<li><b>できること</b>進捗・バッジ・連続学習・活動履歴を表示</li>
+<li><b>データ管理</b>進捗のエクスポート／インポートに対応</li>
+</ul>
+</div>
+</div>
+
+<div class="screen-block">
+<img src="images/dojo-daily-quiz.png" alt="デイリークイズ画面">
+<div>
+<h3 class="screen-title">デイリークイズ</h3>
+<ul class="screen-points">
+<li><b>できること</b>毎日のクイズと、間隔を空けた復習スケジュール</li>
+<li><b>関連画面</b>弱点マップ（スキルチェック結果）、自己分析ワークシート（自動保存）</li>
+</ul>
+</div>
+</div>
+
+</section>
+
+<!-- 道場: システムの流れ -->
+<section class="card">
+<h2>🔄 システムの流れ</h2>
+<div class="flow">
+コンテンツ（TypeScript） → Honoでページ生成 → 静的HTML（118ページ） → GitHub Actions → GitHub Pagesで公開 → ブラウザで学習（進捗はlocalStorage）
+</div>
+</section>
+
+<!-- 道場: 技術構成 -->
+<section class="card">
+<h2>🏗 技術構成</h2>
+<div class="tech-grid">
+<div class="tech-box"><div class="name">Hono 4 + TypeScript</div><div class="role">ページ生成</div></div>
+<div class="tech-box"><div class="name">Tailwind CSS + Font Awesome</div><div class="role">見た目（CDN読み込み）</div></div>
+<div class="tech-box"><div class="name">素のJavaScript</div><div class="role">画面の動き（app.js）</div></div>
+<div class="tech-box"><div class="name">sql.js</div><div class="role">ブラウザ内SQLite（SQL演習）</div></div>
+<div class="tech-box"><div class="name">localStorage</div><div class="role">進捗保存（サーバー・DBなし）</div></div>
+<div class="tech-box"><div class="name">GitHub Pages + Actions</div><div class="role">公開・自動デプロイ</div></div>
+</div>
+</section>
+
+<!-- 道場: 技術的な工夫 -->
+<section class="card">
+<h2>⭐ 技術的な工夫</h2>
+<div class="kufu-grid">
+<div class="kufu-box">
+<div class="problem">課題：運用の手間とコスト</div>
+サーバー・DB・外部APIを持たず、進捗はすべてlocalStorageに保存する静的サイトにしました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：Tailwind CDNは動的なクラス名を拾えない</div>
+colorMapに全色を静的に並べる規約にし、トラックの色が表示されない問題を防ぎました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：GitHub Pagesのサブパス配信でリンクが壊れる</div>
+共通のパスヘルパー（withBase）にリンク生成を一本化しました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：演習コードの安全な実行</div>
+Web Workerで実行して5秒でタイムアウトさせ、無限ループでも画面が固まらないようにしました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：進捗データの引き継ぎ</div>
+進捗のエクスポート／インポートを実装し、不正なJSONはエラー表示のみで既存データを変更しない設計にしました。
+</div>
+<div class="kufu-box">
+<div class="problem">課題：全ページの静的HTML化</div>
+生成スクリプトで全ルートを書き出し（118ページ）、404ページも生成してGitHub Pagesに対応しました。
+</div>
+</div>
+</section>
+
+<!-- 道場: 自分の担当 -->
+<section class="card">
+<h2>👤 自分の担当</h2>
+<p>要件定義・設計・実装・テストまで、個人開発で一貫して担当しました。初版はGensparkで作り、その後ClaudeとClaude Codeと協働して、講座の追加、スマホ対応、GitHub Pagesでの公開まで改修しました。</p>
+</section>
+
+<!-- 道場: 課題と解決 -->
+<section class="card">
+<h2>🛠 課題と解決</h2>
+<p><b>発生した問題：</b>ビルド（vite build）は型チェックをしないため、型エラー9件が見逃されたまま残っていました。</p>
+<p><b>解決方法：</b>tsc --noEmitで検出して修正し、現在は0件です。変更後は型チェックとビルドの両方を通すことをルールにしました。</p>
+</section>
+
+<!-- 道場: ビジネス価値 -->
+<section class="card">
+<h2>💼 ビジネス価値</h2>
+<div class="value-grid">
+<div class="value-box">新人や未経験者向けの社内研修・オンボーディング（入社後の立ち上がり支援）教材として応用できます。</div>
+<div class="value-box">サーバーやデータベースを使わない静的サイトなので、運用コストがかからず、すぐに配布できます。</div>
+</div>
+</section>
+
+<!-- 道場: 今後の拡張 -->
+<section class="card">
+<h2>🚀 今後の拡張</h2>
+<ul class="simple">
+<li>講座とシナリオの追加</li>
+<li>学習の進み具合を、書き出し・読み込みの手動ではなく、複数の端末で自動的に引き継げる仕組み</li>
+</ul>
+</section>
+
+<!-- 道場: GitHub -->
+<section class="card">
+<h2>🔗 GitHub</h2>
+<div class="github">
+<a href="https://github.com/nixon1140-cpu/engineer-dojo-app" target="_blank">GitHub Repository</a>
+<a href="https://nixon1140-cpu.github.io/engineer-dojo-app/" target="_blank">公開サイト</a>
 </div>
 </section>
 
